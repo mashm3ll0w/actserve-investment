@@ -7,6 +7,9 @@ class InvestmentAccount(models.Model):
     description = models.TextField(max_length=256, null=False, blank=False)
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
 
+    def __str__(self):
+        return f'{self.name} Account - {self.balance}'
+
 
 class UserAccount(models.Model):
     VIEW_ONLY = 'view_only'
@@ -26,6 +29,9 @@ class UserAccount(models.Model):
     class Meta:
         unique_together = ('user', 'investment_account')
 
+    def __str__(self):
+        return f'{self.user.username}'
+
 
 class Transaction(models.Model):
     DEPOSIT = 'deposit'
@@ -43,3 +49,6 @@ class Transaction(models.Model):
     amount = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     transaction_date = models.DateTimeField(auto_now_add=True, null=False, blank=False)
     transaction_type = models.CharField(max_length=16, choices=TRANSACTION_TYPE_CHOICES, null=False, blank=False)
+
+    def __str__(self):
+        return f'{self.investment_account.name} - {self.transaction_type} - {self.amount}'
