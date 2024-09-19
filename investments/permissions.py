@@ -5,6 +5,11 @@ from .models import UserAccount
 class HasAccountPermission(BasePermission):
 
     def has_permission(self, request, view):
+        # Allow access to POST requests for Users without authentication
+        if request.method == 'POST' and request.path == '/api/users/':
+            return True
+
+        # Check the permissions for the other paths
         account_id = view.kwargs.get('account_id')
         if not account_id:
             return False
@@ -14,11 +19,11 @@ class HasAccountPermission(BasePermission):
         except UserAccount.DoesNotExist:
             return False
 
-        if request.method == 'GET' and user_permission.permission_level in [UserAccount.VIEW_ONLY, UserAccount.FULL_CRUD]:
+        if request.method == 'GET' and user_permission.permissions in [UserAccount.VIEW_ONLY, UserAccount.FULL_CRUD]:
             return True
-        elif request.method in ['POST', 'PUT', 'DELETE'] and user_permission.permission_level == UserAccount.FULL_CRUD:
+        elif request.method in ['POST', 'PUT', 'DELETE'] and user_permission.permissions == UserAccount.FULL_CRUD:
             return True
-        elif request.method == 'POST' and user_permission.permission_level == UserAccount.POST_ONLY:
+        elif request.method == 'POST' and user_permission.permissions == UserAccount.POST_ONLY:
             return True
 
         return False
