@@ -7,20 +7,22 @@ from investments.models import InvestmentAccount, Transaction, User, UserAccount
 from investments.permissions import HasAccountPermission
 from investments.serializers import InvestmentAccountSerializer, TransactionSerializer, \
     UserAccountSerializer, UserSerializer
-from rest_framework.permissions import IsAuthenticated
-
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from investments.services import InvestmentAccountService
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated,]
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [HasAccountPermission]
 
 
-class InvestmentAccountViewSet(APIView):
+class InvestmentAccountViewSet(viewsets.ModelViewSet):
     serializer_class = InvestmentAccountSerializer
     queryset = InvestmentAccount.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [HasAccountPermission]
 
     def perform_create(self, serializer):
         account = serializer.save()
