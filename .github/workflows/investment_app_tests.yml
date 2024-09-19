@@ -53,7 +53,7 @@ jobs:
         DB_NAME: ${{ env.POSTGRES_DB }}
         DB_USER: ${{ env.POSTGRES_USER }}
         DB_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-        DB_HOST: localhost
+        DB_HOST: postgres
         DB_PORT: 5432
       run: |
         python manage.py test investments.tests
