@@ -1,6 +1,7 @@
 from rest_framework.test import APITestCase
 from django.contrib.auth import get_user_model
 from investments.models import InvestmentAccount, Transaction, UserAccount
+from rest_framework_simplejwt.tokens import RefreshToken
 User = get_user_model()
 
 
@@ -38,4 +39,14 @@ class InvestmentAccountAPITestCase(APITestCase):
         response = self.client.get(f'/api/users/')
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.data['detail'], 'Authentication credentials were not provided.')
+
+    def get_access_token(self):
+        refresh = RefreshToken.for_user(self.first_user)
+        return str(refresh.access_token)
+
+    def test_authenticated_access(self):
+        access_token = self.get_access_token()
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {access_token}')
+        response = self.client.get(f'/api/users/{self.first_user.id}/')
+        self.assertEqual(response.status_code, 200)
 
