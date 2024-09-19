@@ -1,13 +1,88 @@
 # Actserve Investment App
-An app for managing investment accounts
 
-# Project Requirements
 
+## Table Of Contents
+  - [Local Server Setup](#local-server-setup)
+  - [API Endpoints](#api-endpoints)
+  - [GitHub Actions](#github-actions)
+  - [Project Requirements](#project-requirements)
+  - [Authors](#authors)
+  - [License](#license)
+
+## Introduction
+
+An app for managing investment accounts.
+
+---
+
+## Local Server Setup
+
+To get started with the local development environment, ensure you have `postgresql` and `python >= 3.10` installed:
+```bash
+# Tested on Debian Bookworm
+$ sudo apt install postgresql python3.11
+```
+
+Clone the repository
+```bash
+# clone with ssh
+$ git clone git@github.com:mashm3ll0w/actserve-investment.git
+
+# clone with https
+$ https://github.com/mashm3ll0w/actserve-investment.git
+
+# navigate to the cloned directory
+$ cd actserve-investment
+```
+
+Activate the virtual environment (the project was built using `venv`)
+
+```bash
+# create virtual environment
+$ python3 -m venv venv
+
+# activate virtual environment
+$ source venv/bin/activate
+
+# install dependencies
+$ pip install -r requirements.txt
+```
+
+Run the Server
+
+```bash
+$ python3 manage.py test investments.tests
+```
+
+Run the tests
+```bash
+$ python3 manage.py test investments.tests
+```
+
+## API EndPoints
+
+---
+
+## GitHub Actions
+This project uses GitHub actions to automatically run tests for the app on `push` and `pull requests` to the main branch
+
+The tests can be accessed here - [GitHub Actions](https://github.com/mashm3ll0w/actserve-investment/actions)
+
+
+## Project Requirements
 Create a Django Rest Framework (DRF) API for managing investment accounts that allows more than one user to belong to an investment account it should also allow a user to belong to more than one investment account, with the following requirements:
-- [ ] User Permissions: Extend the User and Django model permissions so that a user can have multiple investment accounts, each with different levels of access:
-- [ ] Investment Account 1: The user should only have view rights and should not be able to make transactions.
-- [ ] Investment Account 2: The user should have full CRUD (Create, Read, Update, Delete) permissions.
-- [ ] Investment Account 3: The user should only be able to post transactions, but not view them.
-- [ ] Admin Endpoint: Create an admin endpoint that returns all of a user's transactions, along with a nested sum of the user's total balance. Additionally, this endpoint should include a date range filter to retrieve transactions that occurred within a specified date range.
-- [ ] Unit Tests: Write unit tests to validate the functionality of the APIs.
-- [ ] GitHub Action: Set up a GitHub Action to automatically run the unit tests.
+- [x] User Permissions: Extend the User and Django model permissions so that a user can have multiple investment accounts, each with different levels of access:
+- [x] Investment Account 1: The user should only have view rights and should not be able to make transactions.
+- [x] Investment Account 2: The user should have full CRUD (Create, Read, Update, Delete) permissions.
+- [x] Investment Account 3: The user should only be able to post transactions, but not view them.
+- [x] Admin Endpoint: Create an admin endpoint that returns all of a user's transactions, along with a nested sum of the user's total balance. Additionally, this endpoint should include a date range filter to retrieve transactions that occurred within a specified date range.
+- [x] Unit Tests: Write unit tests to validate the functionality of the APIs.
+- [x] GitHub Action: Set up a GitHub Action to automatically run the unit tests.
+
+## Authors
+
+[@Charles Swaleh](https://github.com/mashm3ll0w)
+
+## License
+
+MIT License
