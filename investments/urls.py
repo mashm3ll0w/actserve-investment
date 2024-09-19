@@ -10,4 +10,5 @@ router.register(r'users', views.UserViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('auth/', TokenObtainPairView.as_view(), name="obtain_jwt_token"),
+    path('investments/', views.InvestmentAccountViewSet.as_view(), name="investment_accounts")
 ]
