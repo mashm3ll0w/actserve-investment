@@ -1,10 +1,11 @@
 from rest_framework import viewsets, filters, permissions, status
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from investments.models import InvestmentAccount, Transaction, User, UserAccount
-from investments.permissions import HasAccountPermission
+from investments.permissions import HasAccountPermission, UserViewPermission
 from investments.serializers import InvestmentAccountSerializer, TransactionSerializer, \
     UserAccountSerializer, UserSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -14,8 +15,7 @@ from investments.services import InvestmentAccountService
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [HasAccountPermission]
+    permission_classes = [UserViewPermission]
 
 
 class InvestmentAccountViewSet(viewsets.ModelViewSet):

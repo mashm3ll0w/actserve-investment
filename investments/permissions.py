@@ -5,9 +5,6 @@ from .models import UserAccount
 class HasAccountPermission(BasePermission):
 
     def has_permission(self, request, view):
-        # Allow access to POST requests for Users without authentication
-        if request.method == 'POST' and request.path == '/api/users/':
-            return True
 
         # Check the permissions for the other paths
         account_id = view.kwargs.get('account_id')
@@ -27,3 +24,12 @@ class HasAccountPermission(BasePermission):
             return True
 
         return False
+
+
+class UserViewPermission(BasePermission):
+
+    def has_permission(self, request, view):
+        # Allow access to POST requests for Users without authentication
+        if request.method == 'POST' and request.path == '/api/users/':
+            return True
+        return request.user and request.user.is_authenticated
