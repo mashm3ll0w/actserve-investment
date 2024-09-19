@@ -50,9 +50,9 @@ jobs:
       env:
         SECRET_KEY: "vc+zftrhwgt9)e82a@h7m3ur%e5!w+34yr$6_sgd%yyqqsd@p&"
         DEBUG: False
-        DB_NAME: ${{ env.POSTGRES_DB }}
-        DB_USER: ${{ env.POSTGRES_USER }}
-        DB_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        DB_NAME: test_db
+        DB_USER: test_user
+        DB_PASSWORD: test_pass
         DB_HOST: postgres
         DB_PORT: 5432
       run: |
