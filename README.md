@@ -20,7 +20,7 @@ An app for managing investment accounts.
 To get started with the local development environment, ensure you have `postgresql` and `python >= 3.10` installed:
 ```bash
 # Tested on Debian Bookworm
-$ sudo apt install postgresql python3.11
+$ sudo apt install postgresql python3.11 -y
 ```
 
 Clone the repository
@@ -35,7 +35,7 @@ $ https://github.com/mashm3ll0w/actserve-investment.git
 $ cd actserve-investment
 ```
 
-Activate the virtual environment (the project was built using `venv`)
+Activate the virtual environment and set up the `.env`
 
 ```bash
 # create virtual environment
@@ -46,12 +46,15 @@ $ source venv/bin/activate
 
 # install dependencies
 $ pip install -r requirements.txt
+
+# copy the .env_sample to create the project's .env and populate the DB variables
+$ cp .env_sample .env
 ```
 
 Run the Server
 
 ```bash
-$ python3 manage.py test investments.tests
+$ python3 manage.py runserver
 ```
 
 Run the tests
