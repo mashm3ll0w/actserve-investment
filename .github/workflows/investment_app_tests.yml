@@ -41,6 +41,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Wait for PostgreSQL to be ready
+      run: |
+        sudo apt-get update && sudo apt-get install -y wait-for-it
+        wait-for-it postgres:5432 --timeout=60 --strict -- echo "Postgres is up and running"
+
     - name: Run Tests
       env:
         SECRET_KEY: "vc+zftrhwgt9)e82a@h7m3ur%e5!w+34yr$6_sgd%yyqqsd@p&"
@@ -48,6 +53,7 @@ jobs:
         DB_NAME: ${{ env.POSTGRES_DB }}
         DB_USER: ${{ env.POSTGRES_USER }}
         DB_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        DB_HOST: localhost
         DB_PORT: 5432
       run: |
         python manage.py test investments.tests
