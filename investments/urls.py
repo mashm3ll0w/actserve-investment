@@ -1,8 +1,11 @@
-from django.urls import path
+from django.urls import path, include
 import investments.views as views
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
 
 
 urlpatterns = [
-    path('investment_accounts/', views.get_investment_accounts, name='investment_accounts'),
-    path('transactions/', views.get_transactions, name='investment_transactions'),
+    path('', include(router.urls)),
 ]
