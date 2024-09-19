@@ -42,5 +42,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run Tests
+      env:
+        SECRET_KEY: "vc+zftrhwgt9)e82a@h7m3ur%e5!w+34yr$6_sgd%yyqqsd@p&"
       run: |
         python manage.py test investments.tests
