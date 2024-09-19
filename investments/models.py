@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext_lazy as _
 
 
 class InvestmentAccount(models.Model):
@@ -9,6 +10,17 @@ class InvestmentAccount(models.Model):
 
     def __str__(self):
         return f'{self.name} Account - {self.balance}'
+
+
+class User(AbstractUser):
+    username = models.CharField(blank=False, null=False)
+    email = models.EmailField(_('email address'), unique=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+
+    def __str__(self):
+        return f'{self.first_name} - {self.last_name}'
 
 
 class UserAccount(models.Model):
@@ -22,15 +34,15 @@ class UserAccount(models.Model):
         (POST_ONLY, 'Post only')
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
-    investment_account = models.ForeignKey(InvestmentAccount, on_delete=models.CASCADE, null=False, blank=False)
+    user_account = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False, related_name="user_account")
+    investment_account = models.ForeignKey(InvestmentAccount, on_delete=models.CASCADE, null=False, blank=False, related_name='investment_account')
     permissions = models.CharField(max_length=16, choices=PERMISSION_CHOICES, null=False, blank=False)
 
     class Meta:
-        unique_together = ('user', 'investment_account')
+        unique_together = ('user_account', 'investment_account')
 
     def __str__(self):
-        return f'{self.user.username}'
+        return f'{self.user_account.username}'
 
 
 class Transaction(models.Model):
@@ -44,8 +56,8 @@ class Transaction(models.Model):
         (TRANSFER, 'Transfer')
     ]
 
-    investment_account = models.ForeignKey(InvestmentAccount, related_name='transactions', on_delete=models.CASCADE, null=False, blank=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
+    investment_account = models.ForeignKey(InvestmentAccount, related_name='investment_transactions', on_delete=models.CASCADE, null=False, blank=False)
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE, null=False, blank=False, related_name="user_transaction")
     amount = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     transaction_date = models.DateTimeField(auto_now_add=True, null=False, blank=False)
     transaction_type = models.CharField(max_length=16, choices=TRANSACTION_TYPE_CHOICES, null=False, blank=False)
