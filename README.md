@@ -64,7 +64,26 @@ $ python3 manage.py test investments.tests
 
 ## API EndPoints
 
----
+The api endpoints are:
+
+<img src="./image_files/api_endpoints.png">
+
+Create a user:
+
+<img src="./image_files/create_user.png">
+
+Login User:
+
+<img src="./image_files/login_user.png">
+
+The returned `access` token is used for subsequent requests that require authentication.
+
+Put it in the headers in the format `Authorization: Bearer <access_token>`
+
+e.g 
+```bash
+$ curl --request GET --url http://127.0.0.1:8000/api/users/ --header 'Authorization: Bearer <access_token>'
+```
 
 ## GitHub Actions
 This project uses GitHub actions to automatically run tests for the app on `push` and `pull requests` to the main branch
