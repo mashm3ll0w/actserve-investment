@@ -7,22 +7,22 @@ class HasAccountPermission(BasePermission):
     def has_permission(self, request, view):
 
         # Check the permissions for the other paths
-        account_id = view.kwargs.get('account_id')
-        if not account_id:
-            return False
+        if request.user.is_authenticated:
+            account_id = view.kwargs.get('account_id')
+            if not account_id:
+                return False
 
-        try:
-            user_permission = UserAccount.objects.get(user=request.user, investment_account_id=account_id)
-        except UserAccount.DoesNotExist:
-            return False
+            try:
+                user_permission = UserAccount.objects.get(user=request.user, investment_account_id=account_id)
+            except UserAccount.DoesNotExist:
+                return False
 
-        if request.method == 'GET' and user_permission.permissions in [UserAccount.VIEW_ONLY, UserAccount.FULL_CRUD]:
-            return True
-        elif request.method in ['POST', 'PUT', 'DELETE'] and user_permission.permissions == UserAccount.FULL_CRUD:
-            return True
-        elif request.method == 'POST' and user_permission.permissions == UserAccount.POST_ONLY:
-            return True
-
+            if request.method == 'GET' and user_permission.permissions in [UserAccount.VIEW_ONLY, UserAccount.FULL_CRUD]:
+                return True
+            elif request.method in ['POST', 'PUT', 'DELETE'] and user_permission.permissions == UserAccount.FULL_CRUD:
+                return True
+            elif request.method == 'POST' and user_permission.permissions == UserAccount.POST_ONLY:
+                return True
         return False
 
 

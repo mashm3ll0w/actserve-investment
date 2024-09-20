@@ -1,14 +1,10 @@
-from rest_framework import viewsets, filters, permissions, status
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from investments.models import InvestmentAccount, Transaction, User, UserAccount
 from investments.permissions import HasAccountPermission, UserViewPermission, AdminViewPermission
-from investments.serializers import InvestmentAccountSerializer, TransactionSerializer, \
-    UserAccountSerializer, UserSerializer
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from investments.serializers import TransactionSerializer, \
+    UserSerializer
 from investments.services import InvestmentAccountService
 
 
@@ -24,8 +20,8 @@ class UserTransactionsView(APIView):
 
     def get(self, request, account_id, format=None):
         investment_account = InvestmentAccount.objects.get(pk=account_id)
-        user_account = UserAccount.objects.get(investment_account=investment_account, user_account=self.request.user)
-        account_transactions = Transaction.objects.filter(investment_account=investment_account, user=user_account)
+        user_account = UserAccount.objects.get(investment_account=investment_account, user=self.request.user)
+        account_transactions = Transaction.objects.filter(investment_account=investment_account, user_account=user_account)
         serializer = TransactionSerializer(account_transactions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
