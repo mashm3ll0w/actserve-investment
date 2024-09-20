@@ -21,8 +21,8 @@ class InvestmentAccountAPITestCase(APITestCase):
         self.admin_user = User.objects.get(email=admin_user.data['email'])
         self.account1 = InvestmentAccount.objects.create(name='Account 1', description='View Only Account', balance=1000)
         self.account2 = InvestmentAccount.objects.create(name='Account 2', description='Full CRUD Account', balance=5000)
-        UserAccount.objects.create(user_account=self.first_user, investment_account=self.account1, permissions=UserAccount.VIEW_ONLY)
-        UserAccount.objects.create(user_account=self.admin_user, investment_account=self.account2, permissions=UserAccount.FULL_CRUD)
+        UserAccount.objects.create(user=self.first_user, investment_account=self.account1, permissions=UserAccount.VIEW_ONLY)
+        UserAccount.objects.create(user=self.admin_user, investment_account=self.account2, permissions=UserAccount.FULL_CRUD)
 
     def test_create_user(self):
         response = self.client.post(path='/api/users/',
