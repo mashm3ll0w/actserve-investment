@@ -66,7 +66,19 @@ $ python3 manage.py test investments.tests
 
 The api endpoints are:
 
-<img src="./image_files/api_endpoints.png">
+```bash
+# Login 
+http://127.0.0.1/api/login/
+
+# Users Viewset (GET, PUT, POST)
+http://127.0.0.1/api/users/
+
+# Account View that where actions are based on the account permissions
+http://127.0.0.1/api/investment_accounts/<int:account_id>/transactions/
+
+# Admin View for all of a user's transactions
+http://127.0.0.1/api/user_transactions/<int:account_id>
+```
 
 Create a user:
 

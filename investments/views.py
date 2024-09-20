@@ -18,40 +18,6 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [UserViewPermission]
 
 
-class InvestmentAccountViewSet(viewsets.ModelViewSet):
-    serializer_class = InvestmentAccountSerializer
-    queryset = InvestmentAccount.objects.all()
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [HasAccountPermission]
-
-    def perform_create(self, serializer):
-        account = serializer.save()
-        InvestmentAccountService.update_account_balance(account)
-
-
-class TransactionViewSet(viewsets.ModelViewSet):
-    serializer_class = TransactionSerializer
-    queryset = Transaction.objects.all()
-    permission_classes = [HasAccountPermission]
-
-    def perform_create(self, serializer):
-        account = serializer.validated_data.get('investment_account')
-        user = self.request.user
-        transaction = InvestmentAccountService.create_transaction(user, account, serializer.validated_data['amount'])
-        InvestmentAccountService.update_account_balance(account)
-
-    @action(detail=False, methods=['get'], url_path='user-transactions')
-    def user_transactions(self, request, account_id=None):
-        start_date = request.query_params.get('start_date')
-        end_date = request.query_params.get('end_date')
-        transactions, total_balance = InvestmentAccountService.get_user_transactions(request.user, account_id, start_date, end_date)
-        serializer = self.get_serializer(transactions, many=True)
-        return Response({
-            "transactions": serializer.data,
-            "total_balance": total_balance
-        })
-
-
 class UserTransactionsView(APIView):
     permission_classes = [HasAccountPermission]
     serializer_class = TransactionSerializer(many=True)

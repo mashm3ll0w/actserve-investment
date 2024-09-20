@@ -5,7 +5,6 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
-router.register(r'investment_accounts', views.InvestmentAccountViewSet, basename='investment_accounts')
 
 urlpatterns = [
     path('', include(router.urls)),

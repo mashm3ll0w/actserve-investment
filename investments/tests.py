@@ -62,7 +62,6 @@ class InvestmentAccountAPITestCase(APITestCase):
         response = self.client.get(f'/api/user_transactions/{self.investment_account2.id}')
         self.assertEqual(response.status_code, 200)
 
-
     def test_access_admin_view_with_non_admin(self):
         access_token = self.get_access_token()
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {access_token}')
