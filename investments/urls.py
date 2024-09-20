@@ -10,5 +10,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('login/', TokenObtainPairView.as_view(), name="obtain_jwt_token"),
     path('investment_accounts/<int:account_id>/transactions/', views.UserTransactionsView.as_view(), name='user_transactions'),
+    path('investment_accounts/<int:account_id>/transactions/<int:transaction_id>', views.UserTransactionsUpdateAndDestroyView.as_view(), name='update_or_destroy_transaction'),
     path('user_transactions/<int:account_id>', views.AdminView.as_view(), name='admin_user_transactions')
 ]

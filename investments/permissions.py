@@ -1,4 +1,7 @@
+from rest_framework import status
 from rest_framework.permissions import BasePermission
+from rest_framework.response import Response
+
 from .models import UserAccount
 
 
@@ -15,7 +18,7 @@ class HasAccountPermission(BasePermission):
             try:
                 user_permission = UserAccount.objects.get(user=request.user, investment_account_id=account_id)
             except UserAccount.DoesNotExist:
-                return False
+                return Response({"error": "InvestmentAccount not found!"}, status=status.HTTP_404_NOT_FOUND)
 
             if request.method == 'GET' and user_permission.permissions in [UserAccount.VIEW_ONLY, UserAccount.FULL_CRUD]:
                 return True
