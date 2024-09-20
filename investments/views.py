@@ -62,3 +62,19 @@ class UserTransactionsView(APIView):
         account_transactions = Transaction.objects.filter(investment_account=investment_account, user=user_account)
         serializer = TransactionSerializer(account_transactions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class AdminView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = TransactionSerializer(many=True)
+
+    def get(self, request, account_id=None):
+        start_date = request.query_params.get('start_date')
+        end_date = request.query_params.get('end_date')
+        transactions, total_balance = InvestmentAccountService.get_user_transactions(request.user, account_id, start_date, end_date)
+        serializer = TransactionSerializer(transactions, many=True)
+        return Response({
+            "transactions": serializer.data,
+            "total_balance": total_balance
+        })
+    
