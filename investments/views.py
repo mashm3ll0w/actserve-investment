@@ -25,6 +25,15 @@ class UserTransactionsView(APIView):
         serializer = TransactionSerializer(account_transactions, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def post(self, request, account_id):
+        data = request.data
+        investment_account = InvestmentAccount.objects.get(pk=account_id)
+        user_account = UserAccount.objects.get(investment_account=investment_account,
+                                               user=self.request.user)
+        transaction = Transaction.objects.create(investment_account=investment_account,
+                                                          user_account=user_account, **data)
+        serializer = TransactionSerializer(transaction)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class AdminView(APIView):
     permission_classes = [AdminViewPermission]

@@ -77,6 +77,7 @@ http://127.0.0.1/api/users/
 
 # Account View that where actions are based on the account permissions
 http://127.0.0.1/api/investment_accounts/<int:account_id>/transactions/
+> POST & PUT data formart - {"amount": 999, "transaction_type": "deposit"}
 
 # Admin View for all of a user's transactions
 http://127.0.0.1/api/user_transactions/<int:account_id>
