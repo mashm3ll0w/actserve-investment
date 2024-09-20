@@ -51,9 +51,11 @@ $ pip install -r requirements.txt
 $ cp .env_sample .env
 ```
 
-Run the Server
+Make the database migrations and then start the server
 
 ```bash
+$ python3 manage.py migrate
+
 $ python3 manage.py runserver
 ```
 
