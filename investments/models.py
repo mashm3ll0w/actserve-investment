@@ -9,7 +9,7 @@ class InvestmentAccount(models.Model):
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
 
     def __str__(self):
-        return f'{self.name} Account - {self.balance}'
+        return f'{self.name} - {self.balance}'
 
 
 class User(AbstractUser):
@@ -42,7 +42,7 @@ class UserAccount(models.Model):
         unique_together = ('user', 'investment_account')
 
     def __str__(self):
-        return f'{self.user.username}'
+        return f'{self.user.username} - {self.investment_account.name}'
 
 
 class Transaction(models.Model):

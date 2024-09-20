@@ -12,7 +12,7 @@ class HasAccountPermission(BasePermission):
             return False
 
         try:
-            user_permission = UserAccount.objects.get(user_account=request.user, investment_account_id=account_id)
+            user_permission = UserAccount.objects.get(user=request.user, investment_account_id=account_id)
         except UserAccount.DoesNotExist:
             return False
 
@@ -33,3 +33,12 @@ class UserViewPermission(BasePermission):
         if request.method == 'POST' and request.path == '/api/users/':
             return True
         return request.user and request.user.is_authenticated
+
+
+class AdminViewPermission(BasePermission):
+
+    def has_permission(self, request, view):
+        # Allow access to POST requests for Users without authentication
+        if request.user.is_authenticated and request.user.is_superuser:
+            return True
+        return False

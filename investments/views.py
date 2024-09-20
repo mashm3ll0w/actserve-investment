@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from investments.models import InvestmentAccount, Transaction, User, UserAccount
-from investments.permissions import HasAccountPermission, UserViewPermission
+from investments.permissions import HasAccountPermission, UserViewPermission, AdminViewPermission
 from investments.serializers import InvestmentAccountSerializer, TransactionSerializer, \
     UserAccountSerializer, UserSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -65,16 +65,15 @@ class UserTransactionsView(APIView):
 
 
 class AdminView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AdminViewPermission]
     serializer_class = TransactionSerializer(many=True)
 
     def get(self, request, account_id=None):
         start_date = request.query_params.get('start_date')
         end_date = request.query_params.get('end_date')
-        transactions, total_balance = InvestmentAccountService.get_user_transactions(request.user, account_id, start_date, end_date)
+        transactions, total_balance = InvestmentAccountService.get_user_transactions(account_id, start_date, end_date)
         serializer = TransactionSerializer(transactions, many=True)
         return Response({
             "transactions": serializer.data,
             "total_balance": total_balance
         })
-    
