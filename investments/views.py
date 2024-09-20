@@ -52,3 +52,13 @@ class TransactionViewSet(viewsets.ModelViewSet):
         })
 
 
+class UserTransactionsView(APIView):
+    permission_classes = [HasAccountPermission]
+    serializer_class = TransactionSerializer(many=True)
+
+    def get(self, request, account_id, format=None):
+        investment_account = InvestmentAccount.objects.get(pk=account_id)
+        user_account = UserAccount.objects.get(investment_account=investment_account, user_account=self.request.user)
+        account_transactions = Transaction.objects.filter(investment_account=investment_account, user=user_account)
+        serializer = TransactionSerializer(account_transactions, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
